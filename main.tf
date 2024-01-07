@@ -18,16 +18,16 @@ data "aws_vpc" "default" {
   default = true
 }
 
-module "blog_sg" {
+module "blog_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
 
-  name        = "web-server"
-  description = "Security group for web-server with HTTP ports open within VPC"
+  name        = "blog-security-group"
+  description = "Security group for Blog Website with HTTP ports open within VPC"
 
   vpc_id              = data.aws_vpc.default.id
 
-  ingress_rules       = ["http-80-tcp", "http-80-tcp"]
+  ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
 
   egress_rules       = ["all-all"]
@@ -37,9 +37,9 @@ module "blog_sg" {
 resource "aws_instance" "blog" {
   ami                    = data.aws_ami.app_ami.id
   instance_type          = var.instance_type
-  vpc_security_group_ids = [module.blog_sg.security_group_id]
+  vpc_security_group_ids = [module.blog_security_group.security_group_id]
 
   tags = {
-    Name = "HelloWorld"
+    Name = "Blog Website"
   }
 }
