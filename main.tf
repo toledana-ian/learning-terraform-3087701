@@ -18,6 +18,17 @@ data "aws_vpc" "default" {
   default = true
 }
 
+module "blog_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+
+  name        = "web-server"
+  description = "Security group for web-server with HTTP ports open within VPC"
+
+  vpc_id = data.aws_vpc.default.id
+  ingress_rules = ["http-80-tcp", "http-80-tcp"]
+}
+
 resource "aws_security_group" "blog_security_group" {
   name        = "blog-security-group"
   description = "Allow http and https in. Allow everything out."
