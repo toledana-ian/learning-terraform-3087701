@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-    },
+    }
     dotenv = {
       source  = "stacklet/dotenv"
       version = ">=0.0.2, <2.0.0"
